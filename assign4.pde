@@ -140,7 +140,7 @@ void setup() {
   
 	}
   
-  for(int i = 0; i < SOIL_ROW_COUNT; i++){
+  for(int i = 0; i < 24; i++){
     int count=floor(random(2))+1;
     for (int j = 0; j < count; j++) {
       col=floor(random(8))+1;
@@ -262,8 +262,8 @@ void draw() {
     //soilEmpty
     for(int i = 0; i < soilHealth.length; i++){ 
       for (int j = 0; j < soilHealth[i].length; j++) {
-       
-        image(soilEmpty,col*SOIL_SIZE, j*SOIL_SIZE);
+        row=j+1;
+        image(soilEmpty,col*SOIL_SIZE, row*SOIL_SIZE);
         
       }
     }

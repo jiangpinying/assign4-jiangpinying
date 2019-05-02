@@ -140,7 +140,7 @@ void setup() {
   
 	}
   
-  for(int i = 0; i < 24; i++){
+  for(int i = 0; i < SOIL_ROW_COUNT; i++){
     int count=floor(random(2))+1;
     for (int j = 0; j < count; j++) {
       col=floor(random(8))+1;
@@ -151,22 +151,17 @@ void setup() {
   
   
 	// Initialize soidiers and their position
-  for(int i=0 ; i<4 ; i++){
-      for(int j=0 ; j<6 ; j++){
-        soldierY[j]=floor((random(4))+1+4*i)*SOIL_SIZE;
-        soldierX[j]=floor(random(8))*SOIL_SIZE;
-        
-      }
-   }
+  
+  for(int i=0 ; i<soldierX.length ; i++){
+    soldierY[i]=floor((random(4))+4*i)*SOIL_SIZE;
+    soldierX[i]=floor(random(8))*SOIL_SIZE;
+  }
 	// Initialize cabbages and their position
   
-  for(int j=0 ; j<6 ; j++){
-      for(int i=0 ; i<4 ; i++){
-        cabbageY[j]=floor((random(4))+1+4*i)*SOIL_SIZE;
-        cabbageX[j]=floor(random(8))*SOIL_SIZE;
-        
-      }
-   }
+  for(int i=0 ; i<6 ; i++){
+    cabbageY[i]=floor(random(4)+4*i)*SOIL_SIZE;
+    cabbageX[i]=floor(random(8))*SOIL_SIZE;
+  }
   
 }
 
@@ -262,16 +257,25 @@ void draw() {
     //soilEmpty
     for(int i = 0; i < soilHealth.length; i++){ 
       for (int j = 0; j < soilHealth[i].length; j++) {
-        row=j+1;
-        image(soilEmpty,col*SOIL_SIZE, row*SOIL_SIZE);
+       
+        image(soilEmpty,col*SOIL_SIZE, j*SOIL_SIZE);
         
       }
     }
 
 		// Cabbages
 		// > Remember to check if playerHealth is smaller than PLAYER_MAX_HEALTH!
-    for(int j=0 ; j<6 ; j++){
-      image(cabbage,cabbageX[j],cabbageY[j]);
+    for(int i=0 ; i<6 ; i++){
+      image(cabbage,cabbageX[i],cabbageY[i]);
+      if(playerX==cabbageX[i] && playerY==cabbageY[i]){
+        cabbageX[i]=width;
+        playerHealth++;
+        if(playerHealth>PLAYER_MAX_HEALTH){
+          playerHealth=PLAYER_MAX_HEALTH;
+          
+        }
+      }
+      
     }
 
 		// Groundhog
@@ -396,17 +400,25 @@ void draw() {
       playerY+=80;
     }
 		// Soldiers
-    for(int i=0 ; i<4 ; i++){
-      for(int j=0 ; j<6 ; j++){
-        soldierX[j]+=2;
-        if(soldierX[j]>width){
-          soldierX[j]=-80;
-        }
-        image(soldier,soldierX[j],soldierY[j]);
+    for(int i=0 ; i<6 ; i++){
+      image(soldier,soldierX[i],soldierY[i]);
+      soldierX[i]+=2;
+      if(soldierX[i]>width){
+        soldierX[i]=-80;
+      }
+      if(soldierX[i]<playerX+80 && soldierX[i]+80>playerX &&
+        soldierY[i]<playerY+80 && soldierY[i]+80>playerY){
+        playerY=-80;
+        playerX=320;
+        playerHealth--;
+        
+      }
+    
+      
         
         
       }
-    }
+    
 		// > Remember to stop player's moving! (reset playerMoveTimer)
 		// > Remember to recalculate playerCol/playerRow when you reset playerX/playerY!
 		// > Remember to reset the soil under player's original position!
@@ -433,6 +445,10 @@ void draw() {
 		// Health UI
     for(int i=0 ; i<playerHealth ; i++ ){ 
       image(life,i*70+10,10);
+    }
+    
+    if(playerHealth==0){
+      gameState=GAME_OVER;
     }
     
 		break;
@@ -466,10 +482,17 @@ void draw() {
 						soilHealth[i][j] = 15;
 					}
 				}
-
-				// Initialize soidiers and their position
-
-				// Initialize cabbages and their position
+        // Initialize soidiers and their position
+				for(int i=0 ; i<soldierX.length ; i++){
+          soldierY[i]=floor((random(4))+4*i)*SOIL_SIZE;
+          soldierX[i]=floor(random(8))*SOIL_SIZE;
+        }
+        // Initialize cabbages and their position
+  
+        for(int i=0 ; i<6 ; i++){
+          cabbageY[i]=floor(random(4)+4*i)*SOIL_SIZE;
+          cabbageX[i]=floor(random(8))*SOIL_SIZE;
+        }
 				
 			}
 

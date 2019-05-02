@@ -403,21 +403,21 @@ void draw() {
     for(int i=0 ; i<6 ; i++){
       image(soldier,soldierX[i],soldierY[i]);
       soldierX[i]+=2;
-      if(soldierX[i]>width){
-        soldierX[i]=-80;
-      }
+      
       if(soldierX[i]<playerX+80 && soldierX[i]+80>playerX &&
         soldierY[i]<playerY+80 && soldierY[i]+80>playerY){
-        playerY=-80;
-        playerX=320;
+        playerY=PLAYER_INIT_Y;
+        playerX=PLAYER_INIT_X;
+        playerCol = (int) (playerX / SOIL_SIZE);
+        playerRow = (int) (playerY / SOIL_SIZE);
+        playerMoveTimer = 0;
         playerHealth--;
         
       }
-    
-      
-        
-        
+      if(soldierX[i]>width){
+       soldierX[i]=-80;
       }
+    }
     
 		// > Remember to stop player's moving! (reset playerMoveTimer)
 		// > Remember to recalculate playerCol/playerRow when you reset playerX/playerY!

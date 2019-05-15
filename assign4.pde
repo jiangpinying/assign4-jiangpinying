@@ -21,6 +21,8 @@ final int START_BUTTON_X = 248;
 final int START_BUTTON_Y = 360;
 
 float[] cabbageX=new float [6],cabbageY=new float [6],soldierX=new float [6], soldierY=new float [6];
+float[] soilEmptyX=new float [24],soilEmptyY=new float [24];
+float[] soilEmptyX1=new float [24],soilEmptyY1=new float [24];
 
 float soldierSpeed = 2f;
 
@@ -133,21 +135,26 @@ void setup() {
         soilHealth[i][12]=30;
         soilHealth[i][15]=30;
       }
+        
         soilHealth[i][i]=30;
         soilHealth[i][j]=15;
 		}
     
   
 	}
-  
-  for(int i = 0; i < SOIL_ROW_COUNT; i++){
-    int count=floor(random(2))+1;
-    for (int j = 0; j < count; j++) {
-      col=floor(random(8))+1;
-      row=i+1;
-      
+ 
+  for(int i = 0; i < 24; i++){
+    soilEmptyX[i]=floor(random(8))*SOIL_SIZE;
+    soilEmptyY[i]=(i+1)*SOIL_SIZE;
+  }
+  for(int i = 0; i < 24; i++){
+    int count=floor(random(1)+1);
+     for(int j=0 ; j<count ; j++){
+      soilEmptyX1[i]=floor(random(8))*SOIL_SIZE;
+      soilEmptyY1[i]=(i+1)*SOIL_SIZE; 
     }
   }
+  
   
   
 	// Initialize soidiers and their position
@@ -251,29 +258,22 @@ void draw() {
       }
 		}
     
-    
-      
-    
     //soilEmpty
-    for(int i = 0; i < soilHealth.length; i++){ 
-      for (int j = 0; j < soilHealth[i].length; j++) {
-       
-        image(soilEmpty,col*SOIL_SIZE, j*SOIL_SIZE);
-        
-      }
+    for(int i = 0; i < 24; i++){ 
+      image(soilEmpty,soilEmptyX[i], soilEmptyY[i]);
+      image(soilEmpty,soilEmptyX1[i], soilEmptyY1[i]);
     }
 
 		// Cabbages
 		// > Remember to check if playerHealth is smaller than PLAYER_MAX_HEALTH!
     for(int i=0 ; i<6 ; i++){
       image(cabbage,cabbageX[i],cabbageY[i]);
-      if(playerX==cabbageX[i] && playerY==cabbageY[i]){
+      if(playerHealth<PLAYER_MAX_HEALTH && 
+      cabbageX[i]<playerX+80 && cabbageX[i]+80>playerX &&
+        cabbageY[i]<playerY+80 && cabbageY[i]+80>playerY){
         cabbageX[i]=width;
         playerHealth++;
-        if(playerHealth>PLAYER_MAX_HEALTH){
-          playerHealth=PLAYER_MAX_HEALTH;
-          
-        }
+        
       }
       
     }
@@ -482,6 +482,17 @@ void draw() {
 						soilHealth[i][j] = 15;
 					}
 				}
+        for(int i = 0; i < 24; i++){
+          soilEmptyX[i]=floor(random(8))*SOIL_SIZE;
+          soilEmptyY[i]=(i+1)*SOIL_SIZE;
+        }
+        for(int i = 0; i < 24; i++){
+          int count=floor(random(1)+1);
+           for(int j=0 ; j<count ; j++){
+            soilEmptyX1[i]=floor(random(8))*SOIL_SIZE;
+            soilEmptyY1[i]=(i+1)*SOIL_SIZE; 
+          }
+        }
         // Initialize soidiers and their position
 				for(int i=0 ; i<soldierX.length ; i++){
           soldierY[i]=floor((random(4))+4*i)*SOIL_SIZE;
